@@ -49,7 +49,7 @@ class TransferFundsView(View):
             form.save()
             return redirect('accounts:transfer')
         else:
-            messages.error(request, "Insufficient funds in the sender's account.")
+            messages.error(request, form.errors['__all__'])
             return render(request, 'accounts/funds.html', {'form': form})
 
     def get(self, request, *args, **kwargs):

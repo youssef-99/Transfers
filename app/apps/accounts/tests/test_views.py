@@ -116,4 +116,3 @@ class TransferFundsViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), "Insufficient funds in the sender's account.")

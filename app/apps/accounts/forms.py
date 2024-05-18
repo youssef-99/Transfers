@@ -1,4 +1,6 @@
 from django import forms
+from django.db import transaction
+
 from .models import Account
 
 
@@ -12,8 +14,11 @@ class TransferForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         sender = cleaned_data.get('sender')
-        cleaned_data.get('recipient')
+        recipient = cleaned_data.get('recipient')
         amount = cleaned_data.get('amount')
+
+        if sender == recipient:
+            raise forms.ValidationError('Cant send to same person')
 
         if sender and amount:
             if amount > sender.balance:
@@ -23,9 +28,8 @@ class TransferForm(forms.Form):
         sender = self.cleaned_data['sender']
         recipient = self.cleaned_data['recipient']
         amount = self.cleaned_data['amount']
-
-        sender.balance -= amount
-        recipient.balance += amount
-        sender.save()
-        recipient.save()
-
+        with transaction.atomic():
+            sender.balance -= amount
+            recipient.balance += amount
+            sender.save()
+            recipient.save()
