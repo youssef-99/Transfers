@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Table Page{% endblock %}
+
+{% block content %}
+    {% include 'accounts/modal.html' %}
+
+    <div class="row">
+        <div class="col-9">
+            <h1>Accounts</h1>
+        </div>
+
+        <div class="col-3">
+            <div class="d-grid gap-2">
+                <a href="{% url 'accounts:transfer' %}" class="btn btn-primary">
+                    Make Transfers
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">uuid</th>
+            <th scope="col">name</th>
+            <th scope="col">balance</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if accounts %}
+            {% for account in accounts %}
+                <tr>
+                    <th scope="row">{{ account.id }}</th>
+                    <td>{{ account.uuid }}</td>
+                    <td><a href="{% url "accounts:account_details" account.id %}">{{ account.name }}</a></td>
+                    <td>{{ account.balance }}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="4" class="text-center">No accounts available.
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#uploadModal">Please upload more</a>.
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'accounts/js/accounts.js' %}"></script>
+{% endblock %}
+
+
