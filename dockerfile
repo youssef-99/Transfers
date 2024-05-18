@@ -18,5 +18,3 @@ RUN apt-get update && \
 ENV PATH="/scripts:/py/bin:$PATH"
 
 COPY . .
-
-CMD ["python3", "manage.py", "migrate"]

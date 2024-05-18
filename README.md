@@ -15,7 +15,7 @@ git clone git@github.com:youssef-99/Transfers.git
 cd Transfers
 ```
 
-## Environment Variables
+### Environment Variables
 Create a .env file in the ./app/app/ directory with the following content:
 
 ```env
@@ -24,7 +24,7 @@ SECRET_KEY=changeme
 ALLOWED_HOSTS=127.0.0.1,0.0.0,localhost
 ```
 
-## Build and Run the Application
+### Build and Run the Application
 Build the Docker containers
 
 ```bash
@@ -34,4 +34,9 @@ docker-compose build
 Run the containers:
 ```bash
 docker-compose up -d
+```
+### Database Migrations
+Run the initial database migrations:
+```bash
+docker-compose exec app python manage.py migrate
 ```
