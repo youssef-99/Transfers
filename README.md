@@ -1,5 +1,7 @@
 # Transfers
 
+Duration: 4hrs
+
 ## Setup
 
 ### Prerequisites
