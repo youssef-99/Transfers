@@ -38,5 +38,5 @@ docker-compose up -d
 ### Database Migrations
 Run the initial database migrations:
 ```bash
-docker-compose exec app python manage.py migrate
+docker-compose exec web python manage.py migrate --noinput
 ```
