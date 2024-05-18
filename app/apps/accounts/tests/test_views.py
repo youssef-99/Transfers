@@ -29,7 +29,9 @@ class LandingViewTest(TestCase):
 class UploadAccountsViewTest(TestCase):
     def setUp(self):
         self.csv_data = b"ID,Name,Balance\n1,Account1,100.0\n2,Account2,200.0\n"
+        self.invalid_csv_data = b"Ias,Name,Balance\n1,Account1,100.0\n2,Account2,200.0\n"
         self.valid_csv_file = SimpleUploadedFile("accounts.csv", self.csv_data, content_type="text/csv")
+        self.invalid_csv_file = SimpleUploadedFile("accounts.csv", self.invalid_csv_data, content_type="text/csv")
         self.request = RequestFactory().post(reverse('accounts:upload'), {'accountFile': self.valid_csv_file})
 
     def test_valid_csv_upload(self):
@@ -51,6 +53,11 @@ class UploadAccountsViewTest(TestCase):
 
     def test_invalid_csv_upload(self):
         request = RequestFactory().post(reverse('accounts:upload'), {'accountFile': 'invalid_file'})
+        response = UploadAccountsView.as_view()(request)
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_csv_format(self):
+        request = RequestFactory().post(reverse('accounts:upload'), {'accountFile': self.invalid_csv_file})
         response = UploadAccountsView.as_view()(request)
         self.assertEqual(response.status_code, 400)
 
