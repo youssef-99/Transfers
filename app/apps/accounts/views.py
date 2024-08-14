@@ -42,6 +42,7 @@ class AccountDetailView(DetailView):
 
 class TransferFundsView(View):
     def post(self, request, *args, **kwargs):
+        raise Exception
         form = TransferForm(request.POST)
         if form.is_valid():
             messages.success(request,

@@ -2,8 +2,8 @@ FROM python:3.11-slim
 
 LABEL maintainer="Youssef William"
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 COPY ./requirements.txt /requirements.txt
 COPY ./app /app

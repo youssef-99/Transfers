@@ -1,14 +1,54 @@
 version: '3.9'
 
+networks:
+  blog-net:
+    name: blog-net
+
+x-logging: &loki-logging
+  driver: loki
+  options:
+    loki-url: "http://0.0.0.0:3100/api/prom/push"
+
+
 services:
   web:
     restart: always
     build:
       context: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8080
     volumes:
       - ./app/:/usr/src/app/
     ports:
-      - 8000:8000
+      - 8080:8080
     env_file:
       - ./app/app/.env
+    logging: *loki-logging
+
+  prometheus:
+    image: prom/prometheus
+    restart: 'no'
+    volumes:
+      - prometheus_data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    network_mode: host
+    logging: *loki-logging
+
+  grafana:
+    image: grafana/grafana
+    environment:
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource"
+    restart: 'no'
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    network_mode: host
+    logging: *loki-logging
+
+volumes:
+  grafana_data:
+  prometheus_data:
